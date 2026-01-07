@@ -1,4 +1,3 @@
-
 #!/bin/bash
 prev_count=0
 fpath=/var/log/app/app_log.*
