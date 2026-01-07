@@ -1,0 +1,25 @@
+#!/bin/bash
+services="ssh cron mysql ranjith"
+date > svc_log_file
+
+for service in $services
+do
+    systemctl is-active --quiet $service
+    if [ $? -ne 0 ]; then
+        echo "Service $service is not running. Hence attempting to restart..." >> svc_log_file
+        sudo systemctl start $service
+        systemctl is-active --quiet $service
+        if [ $? -eq 0 ]; then
+            echo "Service $service was in-active, and script restarted successfully."
+        else
+            echo "Failed to restart service $service." >> svc_log_file
+        fi
+    fi
+done
+
+subject="Subject: Action required immediatly...!"
+body=$(cat svc_log_file ; date)
+email_message="$subject $body"
+
+echo "$email_message" | msmtp --from=default -t rranjith406@gmail.com
+rm svc_log_file
