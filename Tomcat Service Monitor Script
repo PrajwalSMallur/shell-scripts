@@ -1,4 +1,3 @@
-
 #!/bin/bash
 services="serv1 serv2 serv3..."
 
@@ -11,5 +10,5 @@ do
     fi
 done
 
-cat stopped_list | mail -s "Action required immediately on stopped services" abc@gmail.com
+cat stopped_list | mail -s "Action required immediately on stopped services" prajwalmallur1017@gmail.com
 rm stopped_list
