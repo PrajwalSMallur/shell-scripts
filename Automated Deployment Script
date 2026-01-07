@@ -1,0 +1,25 @@
+
+#!/bin/bash
+services="serv1 serv2 serv3..."
+
+for i in $services
+do
+    ps -ef | grep "$i"
+    sudo service $i stop
+    if [ $? -ne 0 ]; then
+        echo "$i" >> services_list
+    fi
+done
+
+cat services_list | mail -s "Action required immediatley on unstopped services" prajwalmallur1017@gmail.com
+
+cd /var/log/tomcat9
+mv * log_bkup_date/
+
+cd $CATALINA_HOME/webapps/
+mv * build_bkup_date/
+
+cp /home/ec2-user/build/
+cp *.WAR $CATALINA_HOME/webapps/
+
+sudo service tomcat restart
