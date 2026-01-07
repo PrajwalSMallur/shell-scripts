@@ -1,0 +1,15 @@
+
+#!/bin/bash
+services="serv1 serv2 serv3..."
+
+for i in $services
+do
+    ps -ef | grep "$i"
+    if [ $? -ne 0 ]; then
+        echo "$i" >> stopped_list
+        sudo service $i restart
+    fi
+done
+
+cat stopped_list | mail -s "Action required immediately on stopped services" abc@gmail.com
+rm stopped_list
